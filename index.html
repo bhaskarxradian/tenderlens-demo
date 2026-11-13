@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TenderLens — Opportunity Intelligence</title>
+<meta name="description" content="Tender & RFP opportunity intelligence — leads, fit scoring, evidence, and vendor Q&A.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="appbar">
+  <div class="wrap">
+    <button class="brand" id="homeBtn" aria-label="TenderLens home">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="#fff" stroke-width="2.2"/><path d="M15.5 15.5L21 21" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+      <span style="display:flex;flex-direction:column">
+        <span class="name">TenderLens</span>
+        <span class="sub">Opportunity Intelligence</span>
+      </span>
+    </button>
+    <nav class="nav">
+      <button data-view="list" class="active" id="navLeads">My leads</button>
+      <button data-view="list" id="navFind">Find leads</button>
+      <button data-view="ready" id="navReady">Bid readiness</button>
+      <button data-view="alerts" id="navAlerts">Alerts <span class="nbadge" hidden></span></button>
+    </nav>
+    <span class="spacer"></span>
+    <div class="acct">
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme" title="Toggle light / dark"></button>
+      <div class="avatar" title="Signed in">RM</div>
+    </div>
+  </div>
+</div>
+<div class="demo">
+  <div class="wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 8v5M12 16.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg><span><b>Demo workspace.</b>&nbsp;Leads marked <i>Sample</i> are illustrative. Leads marked <i>Verified</i> are real tenders read from official portals on 13 Nov 2026; check the portal before bidding.</span></div>
+</div>
+
+<main class="wrap">
+  <section id="listView"></section>
+  <section id="detailView" hidden></section>
+  <section id="readyView" hidden></section>
+  <section id="alertsView" hidden></section>
+</main>
+
+<script src="data.js"></script>
+<script src="guides.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
