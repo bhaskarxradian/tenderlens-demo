@@ -368,3 +368,20 @@ ul.deliver li svg{width:16px;height:16px;color:var(--good);flex:none;margin-top:
 .grow .gk .ck{display:block;font-weight:500;color:var(--fg)}
 .grow small.cwhen,.grow small.cex{display:block;font-size:11.5px;font-weight:400;color:var(--faint);margin-top:2px}
 .grow small.cex.good{color:var(--good)}
+
+/* ---------- detail accordions ---------- */
+.acc{padding:0}
+.acc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:16px 19px;border-radius:14px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary:hover{background:var(--surface-2)}
+.acc>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.acc>summary>h2{flex:1;margin:0;font-size:16px;font-weight:700;font-family:var(--fs-display);letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.acc-chev{width:18px;height:18px;color:var(--faint);flex:none;transition:transform .15s}
+.acc[open]>summary .acc-chev{transform:rotate(180deg)}
+.acc[open]>summary{border-radius:14px 14px 0 0}
+.acc-body{padding:0 19px 18px}
+.acc-tools{display:flex;justify-content:flex-end;gap:6px;margin-top:14px}
+.acc-all{background:none;border:0;color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;padding:4px 6px;border-radius:6px}
+.acc-all:hover{color:var(--accent);background:var(--surface-2)}
+.acc-tools+.cols{margin-top:6px}
+@media (prefers-reduced-motion:reduce){.acc-chev{transition:none}}

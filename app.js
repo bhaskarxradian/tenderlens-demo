@@ -405,8 +405,7 @@ function openDetail(id,keepScroll){
             <span class="tag">${esc(l.vertical)}</span>
           </div>
           <div class="actions">
-            ${l.portalUrl?`<a class="btn primary" href="${esc(l.portalUrl)}" target="_blank" rel="noopener">Submission portal <svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`:``}
-            ${PORTAL_GUIDES[l.portal]?`<button class="btn" id="applyBtn">How to apply <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`:``}
+            ${PORTAL_GUIDES[l.portal]?`<button class="btn primary" id="applyBtn">How to apply <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`:``}
             ${isOpen(l)?`<button class="btn" id="icsBtn">Add deadline to calendar</button>`:``}
             <a class="btn" href="${esc(l.noticeUrl)}" target="_blank" rel="noopener">Open official notice <svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
@@ -434,12 +433,13 @@ function openDetail(id,keepScroll){
       </div>
     </div>
 
+    <div class="acc-tools"><button class="acc-all" data-open="1">Expand all</button><button class="acc-all" data-open="0">Collapse all</button></div>
     <div class="cols">
       <div class="col">
+        ${eligibilityCard(l)}
         ${needCard(l)}
         ${readinessCard(l)}
         ${applyCard(l)}
-        ${eligibilityCard(l)}
         ${qnaCard(l)}
         ${formatCard(l)}
       </div>
@@ -454,12 +454,41 @@ function openDetail(id,keepScroll){
   `;
   $("#backBtn").addEventListener("click",showList);
   const ib=$("#icsBtn");if(ib)ib.addEventListener("click",()=>downloadIcs(l));
-  const ab=$("#applyBtn");if(ab)ab.addEventListener("click",()=>$("#howToApply").scrollIntoView({behavior:"smooth",block:"start"}));
+  makeAccordions(dv);
+  const ab=$("#applyBtn");if(ab)ab.addEventListener("click",()=>openSection("howToApply"));
   dv.querySelectorAll(".copybtn").forEach(b=>b.addEventListener("click",()=>copyText(b)));
   bindReadyChecks(dv,()=>openDetail(id,true));
   window.scrollTo(0,keepScroll?y:0);
   $("#listView").hidden=true;$("#readyView").hidden=true;$("#alertsView").hidden=true;dv.hidden=false;
 }
+/* ---------- detail sections as accordions ----------
+   Each detail card becomes <details>: its h2 is the always-visible summary (so
+   counts like "4 of 5 ready" stay scannable), the rest folds away. Open/closed
+   state is remembered per section title in this browser. */
+const SKEY="tl-sections";
+const ACC_DEFAULT_OPEN=["Eligibility & who can bid","What they need","What changed","Cost to bid"];
+let ACC={};try{ACC=JSON.parse(localStorage.getItem(SKEY)||"{}")||{};}catch(e){}
+function saveAcc(){try{localStorage.setItem(SKEY,JSON.stringify(ACC));}catch(e){}}
+function makeAccordions(root){
+  root.querySelectorAll(".cols .col > .card").forEach(card=>{
+    const h=card.querySelector(":scope > h2");if(!h)return;
+    const key=(h.firstChild&&h.firstChild.textContent||h.textContent).trim();
+    const d=document.createElement("details");
+    d.className=card.className+" acc";if(card.id)d.id=card.id;d.dataset.key=key;
+    d.open=key in ACC?ACC[key]:ACC_DEFAULT_OPEN.includes(key);
+    const sum=document.createElement("summary");sum.appendChild(h);
+    sum.insertAdjacentHTML("beforeend",`<svg class="acc-chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
+    const body=document.createElement("div");body.className="acc-body";
+    while(card.firstChild)body.appendChild(card.firstChild);
+    d.append(sum,body);
+    d.addEventListener("toggle",()=>{ACC[key]=d.open;saveAcc();});
+    card.replaceWith(d);
+  });
+  root.querySelectorAll(".acc-all").forEach(b=>b.addEventListener("click",()=>{
+    root.querySelectorAll("details.acc").forEach(d=>{d.open=b.dataset.open==="1";});
+  }));
+}
+function openSection(id){const d=document.getElementById(id);if(!d)return;d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"});}
 function needCard(l){const n=l.need,sv=n.services||[],dv=n.deliverables||[];
   return `<div class="card">
     <h2>What they need</h2>
